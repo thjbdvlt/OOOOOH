@@ -22,12 +22,19 @@ import spacy
 
 @spacy.Language.factory("chut_normalizer")
 def create_chut_normalizer(nlp, name="chut_normalizer"):
-    fp_dic = "/chemin/vers/exemple/fr_xii.dic"
-    fp_aff = "/chemin/vers/exemple/fr_xii.aff"
+    """Construit un normalizer de Tokens."""
+
+    # le lexique est une liste de mots (un par ligne).
+    lexique_fp = "/chemin/vers/exemple/words.txt"
+
+    # un `dict` pour des exceptions spécifiques
+    exc = {"ouais": "oui", "ptetre": "peut-être"}
+
     return CHUUUUT.Normalizer(
         nlp=nlp,
         fp_dic=paths.fp_dic,
-        fp_aff=paths.fp_aff
+        fp_aff=paths.fp_aff,
+        exc=exc,
     )
 
 nlp = spacy.load("fr_core_news_lg")
