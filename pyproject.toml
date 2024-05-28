@@ -1,0 +1,17 @@
+[project]
+name = "CHUUUUUUUT"
+authors = [{name="thjbdvlt"}]
+version = "0.1.0"
+description = "normalisation de mots français pour spacy: 'CHUUUUUUUT' devient 'chut'."
+readme = "README.md"
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/thjbdvlt/CHUUUUUUUT"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = {}
