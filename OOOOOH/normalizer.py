@@ -6,7 +6,6 @@ import OOOOOH.chars
 
 
 class Normalizer:
-
     def __init__(self, words_fp=None, exc=None, agg_suff="·"):
         """initier un Normalizer.
 
