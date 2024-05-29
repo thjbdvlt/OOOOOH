@@ -1,15 +1,16 @@
 CHUUUUT
 ==========
 
-normalisation de mots français pour [spacy](https://spacy.io/): `CHUUUUT` devient `chut`.
+normalisation de mots français pour [spacy](https://spacy.io/): `OOOOOH` devient `oh`.
 
 |x|y|règle|
 |--|--|--|
 |chuuuuut!!!!!|chut!|les caractères répétés 3x ou plus sont réduits à un seul|
-|CHUT|chut|les mots sont mis en minuscule|
 |bateâu|bateau|les mots hors-lexiques sont remplacés par une version accentuée différemment, si une telle version existe|
-|autre(s)|autres|les parenthèses intra-mot sont enlevées|
 |peut—être|peut-être|toutes les variantes de tirets sont remplacées par des tirets simples|
+|autre(s)|autres|les parenthèses intra-mot sont enlevées|
+|HO|ho|les mots sont mis en minuscule|
+|PEUUUUT-èTRE|peut-être|fonctionne aussi sur les mots composé: chaque mot est normalisé séparément|
 
 usage
 -----
