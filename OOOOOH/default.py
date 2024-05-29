@@ -1,21 +1,3 @@
-TABLE_ACCENTS = {
-    "é": "e",
-    "ê": "e",
-    "è": "e",
-    "ë": "e",
-    "ü": "u",
-    "û": "u",
-    "ù": "u",
-    "â": "a",
-    "à": "a",
-    "ä": "a",
-    "ï": "i",
-    "î": "i",
-}
-
-SUFF_CHAR_DEL = "·"
-
-
 def set_suff_sort_key(s):
     """Attribue au suffixe donné en paramètre une valeur pour les ordonner.
 
@@ -37,7 +19,7 @@ def set_suff_sort_key(s):
         return -1
 
 
-def agg_suff_one_dot(word, suffixes) -> str:
+def agg_suff_one_dot(word, suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot d'une part et les suffixes assemblés d'autre part.
 
     Args:
@@ -52,10 +34,10 @@ def agg_suff_one_dot(word, suffixes) -> str:
     """
 
     s = "".join(suffixes)
-    return f"{word}·{s}"
+    return f"{word}{char}{s}"
 
 
-def agg_suff_many_dots(word, suffixes) -> str:
+def agg_suff_many_dots(word, suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot et les suffixes, et entre chaque suffixe.
 
     Args:
@@ -69,7 +51,7 @@ def agg_suff_many_dots(word, suffixes) -> str:
         - "auteur·rice·x·s"
     """
 
-    return "·".join([word] + suffixes)
+    return char.join([word] + suffixes)
 
 
 def replace_suff_to_feminine(word, suffixes) -> str:
