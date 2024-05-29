@@ -11,6 +11,7 @@ normalisation de mots français pour [spacy](https://spacy.io/): `OOOOOH` devien
 |autre(s)|autres|les parenthèses intra-mot sont enlevées|
 |HO|ho|les mots sont mis en minuscule|
 |PEUUUUT-èTRE|peut-être|fonctionne aussi sur les mots composé: chaque mot est normalisé séparément|
+|auteur-ricexs|auteur·rice·x·s|uniformise (plusieurs méthodes disponibles) les variantes d'écriture inclusive|
 
 usage
 -----
