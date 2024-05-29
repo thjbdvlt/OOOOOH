@@ -1,13 +1,13 @@
 [project]
-name = "CHUUUUUUUT"
+name = "OOOOOH"
 authors = [{name="thjbdvlt"}]
 version = "0.1.0"
-description = "normalisation de mots français pour spacy: 'CHUUUUUUUT' devient 'chut'."
+description = "normalisation de mots français pour spacy: 'OOOOOH' devient 'oh'."
 readme = "README.md"
 requires-python = ">=3.8"
 
 [project.urls]
-Homepage = "https://github.com/thjbdvlt/CHUUUUUUUT"
+Homepage = "https://github.com/thjbdvlt/OOOOOH"
 
 [build-system]
 requires = ["setuptools"]
