@@ -54,7 +54,7 @@ def create_chut_normalizer(nlp, name="oooh_normalizer"):
         words_files=["./exemple/liste/de/mots/spécifique.txt"],
         use_default_word_list=False,
         suff_sep_char="-",
-        fn_agg_suff=None,
+        fn_agg_suff=aggregate_suffixes,
     )
 
 nlp = spacy.load("fr_core_news_lg")
