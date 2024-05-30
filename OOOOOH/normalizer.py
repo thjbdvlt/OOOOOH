@@ -123,7 +123,6 @@ class Normalizer:
         word = "".join(chars)
         return word
 
-    # def cherche_avec_ou_sans_accents(self, word, norm) -> str:
     def cherche_avec_ou_sans_accents(self, word) -> str:
         """cherche un mot dans les indexes (version accentuée et désaccentuée).
 
