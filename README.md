@@ -28,7 +28,7 @@ import spacy
 def create_chut_normalizer(nlp, name="oh_normalizer"):
     """Construit un normalizer de Tokens."""
 
-    return oh.normalizer.Normalizer(nlp=nlp)
+    return oh.Normalizer(nlp=nlp)
 
 nlp = spacy.load("fr_core_news_lg")
 nlp.add_pipe("oh_normalizer", first=True)
@@ -48,7 +48,7 @@ def aggregate_suffixes(suffixes: list, char: str) -> str:
 def create_chut_normalizer(nlp, name="oh_normalizer"):
     """Construit un normalizer de Tokens."""
 
-    return oh.normalizer.Normalizer(
+    return oh.Normalizer(
         nlp=nlp,
         exc={"ptetre": "peut-être", "ouais": "oui"},
         words_files=["./exemple/liste/de/mots/spécifique.txt"],
