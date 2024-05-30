@@ -195,12 +195,13 @@ class Normalizer:
 
         coupe = s.split("-")
         coupe = [i for i in coupe if i != ""]
+        sep_char = self.suff_sep_char
         cherche = self.cherche_avec_ou_sans_accents
         if len(coupe) == 0:
             return s
         elif len(coupe) == 1:
             return coupe[0]
-        a = [coupe[0]]
+        a = [cherche(coupe[0])]
         for k, g in itertools.groupby(
             coupe[1:], key=OOOOOH.ecriture_inclusive.issuffix
         ):
@@ -214,7 +215,8 @@ class Normalizer:
                         for i in g
                     )
                 )
-                a.append(self.aggregate_suffixes(suffixes))
+                a.append(self.agrege_suffixes(suffixes, sep_char))
+        return "".join(a)
 
     def normaliser_mot(self, word) -> str:
         """Cherche ou construit la forme normalisée d'un mot.
