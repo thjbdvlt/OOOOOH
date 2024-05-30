@@ -9,7 +9,7 @@ class Normalizer:
     def __init__(
         self,
         words_files=[],
-        exc=[],
+        exc={},
         agg_suff="·",
         use_default_word_list=True,
     ):
@@ -23,7 +23,7 @@ class Normalizer:
 
         Returns: None
 
-        Exemple d'utilisation du paramètre `agg_suff`:
+        Valeurs possibles pour le paramètre `agg_suff`:
             '·': auteur·ricexs (défaut)
             '··': auteur·rice·x·s
             '..': auteur.rice.x.s
@@ -144,6 +144,37 @@ class Normalizer:
         index[word] = word
         return word
 
+    def reduce_multichars(self, word) -> str:
+        """réduit les caractères répétés pour expressivité.
+
+        oooooh  ->  ho
+        miette  ==  miette
+        .....   ->  ...
+        !?      ->  ?!
+
+        args:
+            word (str): le mot
+        returs (str): le mot
+        """
+
+        # ooooh -> oh
+        word = self.re_multi.sub(r"\1", word)
+
+        # ....... -> ...
+        while "...." in word:
+            word = word.replace("....", "...")
+
+        # ?!?!!!?? -> ?!
+        for char in (",", "!", "?"):
+            count = word.count(char)
+            if count > 1:
+                word = word.replace(char, "", count - 1)
+
+        # !? -> ?!
+        if "!?" in word:
+            word = word.replace("!?", "?!")
+        return word
+
     def normaliser_mot(self, word) -> str:
         """Cherche ou construit la forme normalisée d'un mot.
 
@@ -173,7 +204,7 @@ class Normalizer:
         )
 
         # enlève les répétitions de caractères (à partir de trois)
-        word = self.re_multi.sub(r"\1", word)
+        word = self.reduce_multichars(word)
 
         # cherche si le mot est, après ces transformations de normalisations, dans l'index.
         if word in index:
@@ -206,6 +237,5 @@ class Normalizer:
         """
 
         for token in doc:
-            if any((c.isalpha() for c in token.text)):
-                token.norm_ = self.normaliser_mot(s=token.text)
+            token.norm_ = self.normaliser_mot(s=token.text)
         return doc
