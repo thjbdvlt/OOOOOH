@@ -109,8 +109,7 @@ class Normalizer:
         Args:
             word (str): le mot dont il faut enlever les accents.
 
-        Returns:
-            str: le mot
+        Returns (str): le mot
         """
 
         d = self.accents_table
@@ -151,8 +150,7 @@ class Normalizer:
         Args:
             word (str): Le mot.
 
-        Returns:
-            str: La forme normalisée du mot.
+        Returns (str): La forme normalisée du mot.
         """
 
         index = self.index
@@ -204,8 +202,7 @@ class Normalizer:
         Args:
             doc (Doc)
 
-        Returns:
-            Doc
+        Returns (Doc): le Doc avec les tokens normalisés (token.norm)
         """
 
         for token in doc:
