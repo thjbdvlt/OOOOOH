@@ -34,7 +34,7 @@ def agg_suff_one_dot(word, suffixes, char) -> str:
     """
 
     s = "".join(suffixes)
-    return f"{word}{char}{s}"
+    return [f"{word}{char}{s}"]
 
 
 def agg_suff_many_dots(word, suffixes, char) -> str:
@@ -51,7 +51,7 @@ def agg_suff_many_dots(word, suffixes, char) -> str:
         - "auteur·rice·x·s"
     """
 
-    return char.join([word] + suffixes)
+    return [word + suffixes]
 
 
 def replace_suff_to_feminine(word, suffixes) -> str:

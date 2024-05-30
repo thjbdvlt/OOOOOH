@@ -72,7 +72,7 @@ def match_suff_feminine(s):
     return r.end() if r else None
 
 
-def split_suff_incl(suffix):
+def split_suffixes(suffix):
     """Décompose un suffixe inclusif aggrégé.
 
     Args:

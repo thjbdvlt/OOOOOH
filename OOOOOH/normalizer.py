@@ -3,6 +3,7 @@ from spacy.lookups import Table
 import OOOOOH.ecriture_inclusive
 import OOOOOH.default
 import OOOOOH.chars
+from OOOOOH.ecriture_inclusive import issuffix, split_suffixes
 
 
 class Normalizer:
@@ -191,7 +192,7 @@ class Normalizer:
             return index[word]
 
         # les normes sont toujours en minuscules
-        word = word.lower()
+        word = word.lower().strip()
 
         # reconstruit le mot, caractère par caractère. si un caractère est dans le set 'chars_todel', il est ignoré, s'il est dans le dict 'chars_toreplace' il est remplacé (ex. '·' par '-'). dans les autres cas, il est placé tel quel.
         rep = self.chars_toreplace
@@ -213,18 +214,21 @@ class Normalizer:
         # une copie du mot pour des modifications destinées uniquement à chercher une norme (et non pas, comme dans les opérations précédentes, à la construire).
         s = word
 
-        if "-" in s:
-            # word = self.enlever_suffixes(word)  # todo: implémenter
-            # si la string contient encore des tirets, il s'agit alors d'un mot composé
-            if "-" in s:
-                x = s.split("-")
-                # enlève les élements vides, produits par exemples dans "-je" ou "peut--être".
-                x = [i for i in x if i != ""]
-                fn = self.cherche_avec_ou_sans_accents
-                a = [fn(sub) for sub in x]
-                s = "-".join(a)
+        cherche = self.cherche_avec_ou_sans_accents
 
-        s = fn(s)
+        if "-" in s:
+            agrege = self.fn_suffixes_aggregate
+            a = []
+            for i in s.split("-"):
+                if i == "":
+                    pass
+                elif issuffix(i):
+                    a.extend(agrege(split_suffixes(i)))
+                else:
+                    a.append(cherche(i))
+            s = "-".join(a)
+
+        s = cherche(s)
         return s
 
     def __call__(self, doc):
