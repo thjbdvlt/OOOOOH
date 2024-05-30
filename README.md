@@ -5,15 +5,23 @@ OOOOOH
 
 normalisation de mots français pour [spacy](https://spacy.io/): `OOOOOH` devient `oh`.
 
-|x|y|règle|
-|--|--|--|
-|chuuuuut!!!!!|chut!|les caractères répétés 3x ou plus sont réduits à un seul (sauf `...`)|
-|bateâu|bateau|les mots hors-lexiques sont remplacés par une version accentuée différemment, si une telle version existe|
-|HO|ho|les mots sont mis en minuscule|
-|PEùùùT-èTRE|peut-être|fonctionne aussi sur les mots composé: chaque mot est normalisé séparément|
-|auteur-rice-x-s|auteur·ricexs|uniformise (plusieurs méthodes disponibles) les variantes d'écriture inclusive|
-|peut—être|peut-être|toutes les variantes de tirets sont remplacées par des tirets simples|
-|autre[ment]|autres|les parenthèses et crochets intra-mot sont enlevées|
+|x|y|
+|--|--|
+|chuuuuut!!!!!|chut!|
+|bateâu|bateau|
+|HO|ho|
+|PEùùùT-èTRE|peut-être|
+|auteur-rice-x-s|auteur·ricexs|
+|peut—être|peut-être|
+|autre[ment]|autres|
+
+- les caractères répétés plus de 3x (2 pour la ponctuation) sont réduits à un seul (sauf "...").
+- les mots hors-lexiques sont remplacés par une version accentuée différemment, si une telle version existe.
+- les mots sont mis en minuscules.
+- les mots composés sont normalisés séparément.
+- les variantes d'écritures inclusives sont uniformisées (caractère de séparation, nombre de caractères, ordre des suffixes).
+- les parenthèses et crochets sont enlevés.
+- les variantes de tirets (et d'apostrophes) remplacées par des tirets (ou apostrophes) simples (droites).
 
 usage
 -----
