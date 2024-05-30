@@ -6,13 +6,20 @@ import OOOOOH.chars
 
 
 class Normalizer:
-    def __init__(self, words_fp=None, exc=None, agg_suff="·"):
+    def __init__(
+        self,
+        words_files=[],
+        exc=[],
+        agg_suff="·",
+        use_default_word_list=True,
+    ):
         """initier un Normalizer.
 
         Args:
-            filepath (str):  Fichier avec une liste de mot (un par ligne)
+            words_fp (str):  Fichier avec une liste de mot (un par ligne)
             exc (dict):  Les exceptions, par exemple {"ouais": "oui"}
             agg_suff (str, Callable):  Accepte soit une fonction définissant comment agréger les suffixes d'écriture inclusive, soit une chaîne de caractère permettant de définir comment utiliser les méthodes prédéfinies.
+            use_default_word_list (bool):  utiliser (en plus des éventuels fichiers de mots en paramètres) la liste de mots integrée au package.
 
         Returns:
             None
@@ -41,11 +48,31 @@ class Normalizer:
         # crée deux tables de lookup: une première qui contient tous les mots (et dans laquelle seront ajoutés les variantes orthographiques, à mesure de l'analyse), et une autre qui contient les versions désaccentués, pointant vers les normes (par exemple: {"etre": "être"}).
         d = {}
         d_desacc = {}
-        with open(words_fp, "r") as f:
-            for l in f.readlines():
-                l = l.strip()
-                d[l] = l
-                d_desacc[self.desaccentuer(l)] = l
+
+        lines = []
+        if use_default_word_list is True:
+            import pkgutil
+
+            lines.extend(
+                pkgutil.get_data(__name__, "data/liste_de_mots.txt")
+                .decode()
+                .split("\n")
+            )
+
+        # la valeur du paramètre 'words_files' est utilisée pour ajouter des mots à la liste.
+        if isinstance(words_files, (list, tuple, set)):
+            for fp in words_files:
+                with open(fp, "r") as f:
+                    lines.extend(f.readlines())
+        elif isinstance(words_files, str):
+            with open(words_files, "r") as f:
+                lines.extend(f.readlines())
+
+        # ajouter chaque mot (un par ligne) aux lookup tables
+        for l in lines:
+            l = l.strip()
+            d[l] = l
+            d_desacc[self.desaccentuer(l)] = l
 
         # utilise l'objet `Lookups` de spaCy, optimisé pour ces tâches.
         self.lookup = Lookups()
@@ -107,22 +134,14 @@ class Normalizer:
 
         return self.re_multi.sub(r"\1", word)
 
-    def is_very_similar(self, x, y):
-        """compare deux mots pour voir s'ils sont identiques à l'exception des accents."""
-
-        if self.desaccentuer(x) == self.desaccentuer(y):
-            return True
-        else:
-            return False
-
     def normaliser_mot(self, word) -> str:
-        """cherche ou construit la forme normalisée d'un mot.
+        """Cherche ou construit la forme normalisée d'un mot.
 
         Args:
-            word (str): le mot
+            word (str): Le mot.
 
         Returns:
-            str: la forme normalisée du mot
+            str: La forme normalisée du mot.
         """
 
         index = self.lookup.get_table("normes")
@@ -131,53 +150,56 @@ class Normalizer:
         )
 
         # cherche si le mot est dans la table lookup.
-        y = index.get(word)
-        if y is not None:
-            return y
+        if word in index:
+            return index[word]
+
+        # une copie du mot, qui va être modifiée successivement jusqu'à trouver une norme.
+        s = word
 
         # reconstruit le mot, caractère par caractère. si un caractère est dans le set 'chars_todel', il est ignoré, s'il est dans le dict 'chars_toreplace' il est remplacé (ex. '·' par '-'). dans les autres cas, il est placé tel quel.
         rep = self.chars_toreplace
-        word = word.lower()
-        word = "".join(
+        s = s.lower()
+        s = "".join(
             [
                 rep[c] if c in rep else c
-                for c in word
+                for c in s
                 if c not in self.chars_todel
             ]
         )
 
         # enlève les répétitions de caractères (à partir de trois)
-        word = self.reduire_multiple(word)
-        if "-" in word:
+        s = self.reduire_multiple(s)
+        if "-" in s:
             # word = self.enlever_suffixes(word)  # todo: implémenter
-            if "-" in word:
-                x = word.split("-")
+            if "-" in s:
+                x = s.split("-")
                 a = []
                 for i in x:
-                    y = index.get(i)
-                    if y is not None:
-                        a.append(y)
+                    if i in index:
+                        norm = index[i]
+                        a.append(norm)
                         continue
-                    y = index_desaccentue.get(self.desaccentuer(i))
-                    if y is not None:
-                        a.append(y)
+                    di = self.desaccentuer(i)
+                    if di in index_desaccentue:
+                        norm = index_desaccentue[di]
+                        a.append(norm)
+                        index[i] = norm
                         continue
                     a.append(i)
-                word = "-".join(a)
+                    index[i] = i
+                s = "-".join(a)
 
-        y = index.get(word)
-        if y is not None:
-            index.set(word, y)
-            return y
+        if s in index:
+            return index[s]
 
-        y = index_desaccentue.get(self.desaccentuer(word))
+        y = index_desaccentue.get(self.desaccentuer(s))
         if y is not None:
-            index.set(word, y)
+            index.set(s, y)
             return y
 
         # index[word] = word
-        index.set(word, word)
-        return word
+        index.set(s, s)
+        return s
 
     def __call__(self, doc):
         """normalise les mots.
@@ -188,7 +210,8 @@ class Normalizer:
         Returns:
             Doc
         """
+
         for token in doc:
             if any((c.isalpha() for c in token.text)):
-                token.norm_ = self.normaliser_mot(word=token.text)
+                token.norm_ = self.normaliser_mot(s=token.text)
         return doc
