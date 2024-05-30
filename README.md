@@ -42,6 +42,10 @@ import OOOOOH as oh
 import spacy
 
 def aggregate_suffixes(suffixes: list, char: str) -> str:
+
+    suffixes = [
+        s.upper() if s == 'x' else s for s in suffixes
+    ]
     return char + char.join([suffixes])
 
 @spacy.Language.factory("oh_normalizer")
