@@ -19,7 +19,7 @@ def set_suff_sort_key(s):
         return -1
 
 
-def agg_suff_one_dot(word, suffixes, char) -> str:
+def agrege_un_tiret(word, suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot d'une part et les suffixes assemblés d'autre part.
 
     Args:
@@ -37,7 +37,7 @@ def agg_suff_one_dot(word, suffixes, char) -> str:
     return [f"{word}{char}{s}"]
 
 
-def agg_suff_many_dots(word, suffixes, char) -> str:
+def agrege_plusieurs_tirets(word, suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot et les suffixes, et entre chaque suffixe.
 
     Args:
@@ -54,7 +54,7 @@ def agg_suff_many_dots(word, suffixes, char) -> str:
     return [word + suffixes]
 
 
-def replace_suff_to_feminine(word, suffixes) -> str:
+def remplace_par_feminin(word, suffixes) -> str:
     """Enlève les suffixes d'écriture inclusive et remplace, dans le mot, la terminaison masculine par une terminaison féminine.
 
     L'usage de cette fonction n'est pas recommandé, en premier lieu car il n'est pas souhaitable de dés-inclusiviser un texte, ensuite car elle modifie les propriétés morphologiques du mot, et enfin car elle est (probablement) assez imprécise. Elle peut toutefois être utile si l'on doit utiliser des modèles incapable d'analyser des textes avec de l'écriture inclusive (et permettra, à défaut d'améliorer ces modèles, de pouvoir analyser ces textes).

@@ -11,7 +11,7 @@ class Normalizer:
         self,
         words_files=[],
         exc={},
-        agg_suff="·",
+        fn_agg_suff=None,
         use_default_word_list=True,
     ):
         """initier un Normalizer.
@@ -19,19 +19,19 @@ class Normalizer:
         Args:
             words_fp (str):  Fichier avec une liste de mot (un par ligne)
             exc (dict):  Les exceptions, par exemple {"ouais": "oui"}
-            agg_suff (str, Callable):  Accepte soit une fonction définissant comment agréger les suffixes d'écriture inclusive, soit une chaîne de caractère permettant de définir comment utiliser les méthodes prédéfinies.
+            fn_agg_suff (callable):  Accepte une fonction définissant comment agréger les suffixes d'écriture inclusive.
             use_default_word_list (bool):  utiliser (en plus des éventuels fichiers de mots en paramètres) la liste de mots integrée au package.
 
         Returns: None
-
-        Valeurs possibles pour le paramètre `agg_suff`:
-            '·': auteur·ricexs (défaut)
-            '··': auteur·rice·x·s
-            '..': auteur.rice.x.s
-            '-': auteur-ricexs (pas recommandé: moins performant)
-            '_': auteur_ricexs
-            None: autrices
         """
+
+        # la valeur du paramètre `fn_agg_suff` doit être callable.
+        if fn_agg_suff is None:
+            self.agrege_suffixes = OOOOOH.default.agrege_un_tiret
+        elif callable(fn_agg_suff):
+            self.agrege_suffixes = fn_agg_suff
+        else:
+            raise TypeError("`fn_agg_suff` is not callable.")
 
         # une table qui associe, à chaque lettre accentuée, sa version non-accentuée
         self.accents_table = {}
@@ -217,7 +217,7 @@ class Normalizer:
         cherche = self.cherche_avec_ou_sans_accents
 
         if "-" in s:
-            agrege = self.fn_suffixes_aggregate
+            agrege = self.agrege_suffixes
             a = []
             for i in s.split("-"):
                 if i == "":
