@@ -57,7 +57,7 @@ def agg_suff_many_dots(word, suffixes, char) -> str:
 def replace_suff_to_feminine(word, suffixes) -> str:
     """Enlève les suffixes d'écriture inclusive et remplace, dans le mot, la terminaison masculine par une terminaison féminine.
 
-    L'usage de cette fonction n'est pas recommandé car elle est probablement assez imprécise. Elle peut toutefois être utile si l'on doit utiliser des modèles incapable d'analyser correctement des textes avec de l'écriture inclusive (et permettra, à défaut d'améliorer ces modèles, de pouvoir analyser ces textes).
+    L'usage de cette fonction n'est pas recommandé, en premier lieu car il n'est pas souhaitable de dés-inclusiviser un texte, ensuite car elle modifie les propriétés morphologiques du mot, et enfin car elle est (probablement) assez imprécise. Elle peut toutefois être utile si l'on doit utiliser des modèles incapable d'analyser des textes avec de l'écriture inclusive (et permettra, à défaut d'améliorer ces modèles, de pouvoir analyser ces textes).
 
     Args:
         word (str): le mot.
