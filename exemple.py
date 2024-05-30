@@ -1,6 +1,7 @@
-from OOOOOH.ecriture_inclusive import issuffix
+from OOOOOH.ecriture_inclusive import issuffix, split_suffixes
+from OOOOOH.default import agrege_un, agrege_plusieurs
 
-for word in (
+for s in (
     "rice",
     "scrice",
     "tricexs",
@@ -12,4 +13,8 @@ for word in (
     "eurice",
     "ricexxsxss",
 ):
-    print(word, issuffix(word))
+    if issuffix(s):
+        print(agrege_un("auteur", split_suffixes(s)))
+        print(agrege_plusieurs("auteur", split_suffixes(s)))
+    else:
+        print(s, False)

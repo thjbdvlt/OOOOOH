@@ -27,7 +27,7 @@ class Normalizer:
 
         # la valeur du paramètre `fn_agg_suff` doit être callable.
         if fn_agg_suff is None:
-            self.agrege_suffixes = OOOOOH.default.agrege_un_tiret
+            self.agrege_suffixes = OOOOOH.default.agrege_un
         elif callable(fn_agg_suff):
             self.agrege_suffixes = fn_agg_suff
         else:

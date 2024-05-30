@@ -19,7 +19,7 @@ def set_suff_sort_key(s):
         return -1
 
 
-def agrege_un_tiret(word, suffixes, char) -> str:
+def agrege_un(word, suffixes) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot d'une part et les suffixes assemblés d'autre part.
 
     Args:
@@ -33,11 +33,10 @@ def agrege_un_tiret(word, suffixes, char) -> str:
         - "auteur·ricexs"
     """
 
-    s = "".join(suffixes)
-    return [f"{word}{char}{s}"]
+    return [word, "".join(sorted(suffixes, key=set_suff_sort_key))]
 
 
-def agrege_plusieurs_tirets(word, suffixes, char) -> str:
+def agrege_plusieurs(word, suffixes) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot et les suffixes, et entre chaque suffixe.
 
     Args:
@@ -51,7 +50,7 @@ def agrege_plusieurs_tirets(word, suffixes, char) -> str:
         - "auteur·rice·x·s"
     """
 
-    return [word + suffixes]
+    return [word] + sorted(suffixes, key=set_suff_sort_key)
 
 
 def remplace_par_feminin(word, suffixes) -> str:
