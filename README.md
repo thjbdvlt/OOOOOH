@@ -24,14 +24,14 @@ pour l'utiliser comme composant d'une [_pipeline spacy_](https://spacy.io/usage/
 import OOOOOH as oh
 import spacy
 
-@spacy.Language.factory("oooh_normalizer")
-def create_chut_normalizer(nlp, name="oooh_normalizer"):
+@spacy.Language.factory("oh_normalizer")
+def create_chut_normalizer(nlp, name="oh_normalizer"):
     """Construit un normalizer de Tokens."""
 
     return oh.normalizer.Normalizer(nlp=nlp)
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("oooh_normalizer", first=True)
+nlp.add_pipe("oh_normalizer", first=True)
 ```
 
 configuration
@@ -44,8 +44,8 @@ import spacy
 def aggregate_suffixes(suffixes: list, char: str) -> str:
     return char + char.join([suffixes])
 
-@spacy.Language.factory("oooh_normalizer")
-def create_chut_normalizer(nlp, name="oooh_normalizer"):
+@spacy.Language.factory("oh_normalizer")
+def create_chut_normalizer(nlp, name="oh_normalizer"):
     """Construit un normalizer de Tokens."""
 
     return oh.normalizer.Normalizer(
@@ -58,7 +58,7 @@ def create_chut_normalizer(nlp, name="oooh_normalizer"):
     )
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("oooh_normalizer", first=True)
+nlp.add_pipe("oh_normalizer", first=True)
 ```
 
 installation
