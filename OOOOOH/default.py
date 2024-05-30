@@ -19,24 +19,24 @@ def set_suff_sort_key(s):
         return -1
 
 
-def agrege_un(word, suffixes) -> str:
+def agrege_un(suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot d'une part et les suffixes assemblés d'autre part.
 
     Args:
-        word (str): le mot.
         suffixes (list): les suffixes.
 
-    Returns:
-        str: le mot et les suffixes, agrégés.
+    Returns (str): les suffixes agregés.
 
     Exemple:
-        - "auteur·ricexs"
+        - ["x", "s", "rice"] -> "·ricexs"
     """
 
-    return [word, "".join(sorted(suffixes, key=set_suff_sort_key))]
+    suffixes = sorted(suffixes, key=set_suff_sort_key)
+    suffixes = "".join(suffixes)
+    return f"{char}{suffixes}"
 
 
-def agrege_plusieurs(word, suffixes) -> str:
+def agrege_plusieurs(suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot et les suffixes, et entre chaque suffixe.
 
     Args:
@@ -50,7 +50,8 @@ def agrege_plusieurs(word, suffixes) -> str:
         - "auteur·rice·x·s"
     """
 
-    return [word] + sorted(suffixes, key=set_suff_sort_key)
+    suffixes = sorted(suffixes, key=set_suff_sort_key)
+    return char.join(suffixes)
 
 
 def remplace_par_feminin(word, suffixes) -> str:

@@ -21,7 +21,7 @@ _suffixes_feminins = r"|".join(
     ]
 )
 _re_issuffix = re.compile(
-    r"x?({feminine})x?s?x?".format(feminine=_suffixes_feminins)
+    r"x?({feminine})?x?s?x?".format(feminine=_suffixes_feminins)
 ).fullmatch
 _re_startswith_feminine = re.compile(_suffixes_feminins).match
 

@@ -1,17 +1,19 @@
 import re
 from spacy.lookups import Table
-import OOOOOH.ecriture_inclusive
+import itertools
 import OOOOOH.default
 import OOOOOH.chars
-from OOOOOH.ecriture_inclusive import issuffix, split_suffixes
+import OOOOOH.ecriture_inclusive
 
 
 class Normalizer:
     def __init__(
         self,
+        nlp,
         words_files=[],
         exc={},
         fn_agg_suff=None,
+        suff_sep_char="·",
         use_default_word_list=True,
     ):
         """initier un Normalizer.
@@ -19,13 +21,16 @@ class Normalizer:
         Args:
             words_fp (str):  Fichier avec une liste de mot (un par ligne)
             exc (dict):  Les exceptions, par exemple {"ouais": "oui"}
-            fn_agg_suff (callable):  Accepte une fonction définissant comment agréger les suffixes d'écriture inclusive.
-            use_default_word_list (bool):  utiliser (en plus des éventuels fichiers de mots en paramètres) la liste de mots integrée au package.
+            fn_agg_suff (callable):  Une fonction définissant comment agréger les suffixes d'écriture inclusive, elle reçoit en paramètre une liste de suffixes et un caractère de séparation (fixé avec le paramètre `suff_sep_char`).
+            suff_sep_char (str): le caractere de séparation pour les suffixes d'écriture inclusive.
+            use_default_word_list (bool):  utiliser (en plus des éventuels fichiers de mots en paramètres) la liste de mots integrée au package. (défaut True.)
 
         Returns: None
         """
 
-        # la valeur du paramètre `fn_agg_suff` doit être callable.
+        self.suff_sep_char = suff_sep_char
+
+        # la valeur du paramètre `fn_agg_suff` doit être callable,
         if fn_agg_suff is None:
             self.agrege_suffixes = OOOOOH.default.agrege_un
         elif callable(fn_agg_suff):
@@ -100,7 +105,7 @@ class Normalizer:
         self.chars_toreplace.update({i: "'" for i in apostrophes})
 
         # ajouter les exceptions
-        n = self.lookup.get_table("normes")
+        n = self.index
         for key, value in exc.items():
             n.set(key, value)
 
@@ -118,7 +123,8 @@ class Normalizer:
         word = "".join(chars)
         return word
 
-    def cherche_avec_ou_sans_accents(self, word, norm) -> str:
+    # def cherche_avec_ou_sans_accents(self, word, norm) -> str:
+    def cherche_avec_ou_sans_accents(self, word) -> str:
         """cherche un mot dans les indexes (version accentuée et désaccentuée).
 
         (met à jour les indexes en même temps.)
@@ -176,6 +182,40 @@ class Normalizer:
             word = word.replace("!?", "?!")
         return word
 
+    def decomposer_recomposer(self, s):
+        """décompose et recompose les mots composés et les suffixes d'écriture inclusive.
+
+        les suffixes d'écriture inclusives sont réorganisés uniformément: "auteur·rice·x·s" et "auteur·xrices" deviendront identique. les mots composés, eux, sont chacuns normalisés séparément et réagregés à la fin: "peùt-ètre" devient "peut-être".
+
+        args:
+            s (str): le mot composé à décomposer-recomposer.
+
+        returns (str): le mot décomposé-recomposé.
+        """
+
+        coupe = s.split("-")
+        coupe = [i for i in coupe if i != ""]
+        cherche = self.cherche_avec_ou_sans_accents
+        if len(coupe) == 0:
+            return s
+        elif len(coupe) == 1:
+            return coupe[0]
+        a = [coupe[0]]
+        for k, g in itertools.groupby(
+            coupe[1:], key=OOOOOH.ecriture_inclusive.issuffix
+        ):
+            if k is False:
+                words_agg = "-".join((cherche(i) for i in g))
+                a.append(f"-{words_agg}")
+            else:
+                suffixes = itertools.chain.from_iterable(
+                    (
+                        OOOOOH.ecriture_inclusive.split_suffixes(i)
+                        for i in g
+                    )
+                )
+                a.append(self.aggregate_suffixes(suffixes))
+
     def normaliser_mot(self, word) -> str:
         """Cherche ou construit la forme normalisée d'un mot.
 
@@ -217,16 +257,7 @@ class Normalizer:
         cherche = self.cherche_avec_ou_sans_accents
 
         if "-" in s:
-            agrege = self.agrege_suffixes
-            a = []
-            for i in s.split("-"):
-                if i == "":
-                    pass
-                elif issuffix(i):
-                    a.extend(agrege(split_suffixes(i)))
-                else:
-                    a.append(cherche(i))
-            s = "-".join(a)
+            s = self.decomposer_recomposer(s)
 
         s = cherche(s)
         return s
@@ -241,5 +272,5 @@ class Normalizer:
         """
 
         for token in doc:
-            token.norm_ = self.normaliser_mot(s=token.text)
+            token.norm_ = self.normaliser_mot(token.text)
         return doc
