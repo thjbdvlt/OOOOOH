@@ -1,43 +1,7 @@
-def match_suff_nonbinary(s):
-    """Match (début de str) un suffixe non-binaire 'x'.
+import re
 
-    Args:
-        s (str): le suffixe dans lequel match 'x'.
-
-    Returns:
-        int: la longueur du match (donc 1) si un match est trouvé, sinon -1.
-    """
-
-    return 1 if s[0] == "x" else -1
-
-
-def match_suff_plural(s):
-    """Match (début de str) un suffixe pluriel 's'.
-
-    Args:
-        s (str): le suffixe dans lequel match 's'.
-
-    Returns:
-        int: la longueur du match (donc 1) si un match est trouvé, sinon -1.
-    """
-
-    return 1 if s[0] == "s" else -1
-
-
-def match_suff_feminine(s):
-    """Match en début de str un suffixe féminin.
-
-    Args:
-        s (str): le suffixe dans lequel un suffixe.
-
-    Returns:
-        int: la longueur du match si un match est trouvé, sinon -1.
-
-    Note:
-        l'ordre dans lequel sont placés, ci-dessous, les différents suffixes est important (c'est un ordre de priorité, il faut par exemple absolument éviter de mettre en première position 'e', qui empêcherait de match 'esse' et 'euse'.)
-    """
-
-    for i in (
+_suffixes_feminins = r"|".join(
+    [
         "trice",
         "rice",
         "ice",
@@ -54,10 +18,58 @@ def match_suff_feminine(s):
         "se",
         "ne",
         "e",
-    ):
-        if s.startswith(i):
-            return len(i)
-    return -1
+    ]
+)
+_re_issuffix = re.compile(
+    r"x?({feminine})x?s?x?".format(feminine=_suffixes_feminins)
+).fullmatch
+_re_startswith_feminine = re.compile(_suffixes_feminins).match
+
+
+def issuffix(s):
+    return True if _re_issuffix(s) and s.count("x") < 2 else False
+
+
+def match_suff_nonbinary(s):
+    """Match (début de str) un suffixe non-binaire 'x'.
+
+    Args:
+        s (str): le suffixe dans lequel match 'x'.
+
+    Returns:
+        int: la longueur du match (donc 1) si un match est trouvé, sinon None.
+    """
+
+    return 1 if s[0] == "x" else None
+
+
+def match_suff_plural(s):
+    """Match (début de str) un suffixe pluriel 's'.
+
+    Args:
+        s (str): le suffixe dans lequel match 's'.
+
+    Returns:
+        int: la longueur du match (donc 1) si un match est trouvé, sinon None.
+    """
+
+    return 1 if s[0] == "s" else None
+
+
+def match_suff_feminine(s):
+    """Match en début de str un suffixe féminin.
+
+    Args:
+        s (str): le suffixe dans lequel un suffixe.
+
+    Returns (int, None): la longueur du match si un match est trouvé, sinon None.
+
+    Note:
+        l'ordre dans lequel sont placés, ci-dessous, les différents suffixes est important (c'est un ordre de priorité, il faut par exemple absolument éviter de mettre en première position 'e', qui empêcherait de match 'esse' et 'euse'.)
+    """
+
+    r = _re_startswith_feminine(s)
+    return r.end() if r else None
 
 
 def split_suff_incl(suffix):
@@ -66,8 +78,7 @@ def split_suff_incl(suffix):
     Args:
         suffix (str): le suffixe à décomposer.
 
-    Returns:
-        Union[list, str]
+    Returns (list): la liste des suffixes décomposés (qui peut être une liste d'un seul élément).
 
     Exemples:
         - "eusexs" -> ["euse", "x", "s"]
@@ -96,11 +107,11 @@ def split_suff_incl(suffix):
         if fn in already:
             continue
         suff_len = fn(s)
-        if suff_len != -1:
+        if suff_len:
             suff = s[:suff_len]
             a.append(suff)
             s = s[suff_len:]
             if s == "":
                 return a
             already.add(fn)
-    return suffix
+    return [suffix]
