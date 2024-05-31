@@ -4,19 +4,18 @@ def set_suff_sort_key(s):
     Args:
         s (str): le suffixe.
 
-    Returns:
-        int
+    Returns (int): 
 
     Note:
         Cette fonction est uniquement destinée à être utilisée comme `key` dans la fonction `sorted`.
     """
 
     if s == "s":
-        return 1
+        return 2
     elif s == "x":
-        return 0
+        return 1
     else:
-        return -1
+        return 0
 
 
 def agrege_un(suffixes, char) -> str:
@@ -43,8 +42,7 @@ def agrege_plusieurs(suffixes, char) -> str:
         word (str): le mot.
         suffixes (list): les suffixes.
 
-    Returns:
-        str: le mot et les suffixes agrégés.
+    Returns (str): le mot et les suffixes agrégés.
 
     Exemple:
         - "auteur·rice·x·s"
@@ -63,8 +61,7 @@ def remplace_par_feminin(word, suffixes) -> str:
         word (str): le mot.
         suffixes (list): les suffixes.
 
-    Returns:
-        str
+    Returns (str): le mot modifié, sans suffixes, au féminin.
     """
 
     lookup = {

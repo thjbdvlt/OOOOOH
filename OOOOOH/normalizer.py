@@ -25,7 +25,7 @@ class Normalizer:
             suff_sep_char (str): le caractere de séparation pour les suffixes d'écriture inclusive.
             use_default_word_list (bool):  utiliser (en plus des éventuels fichiers de mots en paramètres) la liste de mots integrée au package. (défaut True.)
 
-        Returns: None
+        Returns (None)
         """
 
         self.suff_sep_char = suff_sep_char
@@ -124,14 +124,14 @@ class Normalizer:
         return word
 
     def cherche_avec_ou_sans_accents(self, word) -> str:
-        """cherche un mot dans les indexes (version accentuée et désaccentuée).
+        """Cherche un mot dans les indexes (version accentuée et désaccentuée).
 
         (met à jour les indexes en même temps.)
 
-        args:
+        Args:
             - word (str): le mot.
 
-        returns (str): la norme trouvée (le mot tel quel, si rien n'a été trouvé).
+        Returns (str): la norme trouvée (le mot tel quel, si rien n'a été trouvé).
         """
 
         index = self.index
@@ -151,16 +151,17 @@ class Normalizer:
         return word
 
     def reduce_multichars(self, word) -> str:
-        """réduit les caractères répétés pour expressivité.
+        """Réduit les caractères répétés pour expressivité.
 
         oooooh  ->  ho
         miette  ==  miette
         .....   ->  ...
         !?      ->  ?!
 
-        args:
+        Args:
             word (str): le mot
-        returs (str): le mot
+
+        Returns (str): le mot
         """
 
         # ooooh -> oh
@@ -182,14 +183,14 @@ class Normalizer:
         return word
 
     def decomposer_recomposer(self, s):
-        """décompose et recompose les mots composés et les suffixes d'écriture inclusive.
+        """Décompose et recompose les mots composés et les suffixes d'écriture inclusive.
 
-        les suffixes d'écriture inclusives sont réorganisés uniformément: "auteur·rice·x·s" et "auteur·xrices" deviendront identique. les mots composés, eux, sont chacuns normalisés séparément et réagregés à la fin: "peùt-ètre" devient "peut-être".
+        Les suffixes d'écriture inclusives sont réorganisés uniformément: "auteur·rice·x·s" et "auteur·xrices" deviendront identique. les mots composés, eux, sont chacuns normalisés séparément et réagregés à la fin: "peùt-ètre" devient "peut-être".
 
-        args:
+        Args:
             s (str): le mot composé à décomposer-recomposer.
 
-        returns (str): le mot décomposé-recomposé.
+        Returns (str): le mot décomposé-recomposé.
         """
 
         coupe = s.split("-")
@@ -264,7 +265,7 @@ class Normalizer:
         return s
 
     def __call__(self, doc):
-        """normalise les mots.
+        """Normalise les mots.
 
         Args:
             doc (Doc)
