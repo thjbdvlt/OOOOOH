@@ -11,7 +11,7 @@ normalisation de mots français pour [spacy](https://spacy.io/): _BEEEAUCOUP_ de
 |PEùùùT-èTRE|peut-être|
 |auteur-rice-x-s|auteur·ricexs|
 |peut—être|peut-être|
-|autre[ment]|autres|
+|autre[ment]|autrement|
 
 - les caractères répétés plus de 3x (2 pour la ponctuation) sont réduits à un seul (sauf "...").
 - les mots hors-lexiques sont remplacés par une version accentuée différemment, si une telle version existe.
