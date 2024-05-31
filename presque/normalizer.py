@@ -1,9 +1,9 @@
 import re
 from spacy.lookups import Table
 import itertools
-import OOOOOH.default
-import OOOOOH.chars
-import OOOOOH.ecriture_inclusive
+import presque.default
+import presque.chars
+import presque.ecriture_inclusive
 
 
 class Normalizer:
@@ -32,7 +32,7 @@ class Normalizer:
 
         # la valeur du paramètre `fn_agg_suff` doit être callable,
         if fn_agg_suff is None:
-            self.agrege_suffixes = OOOOOH.default.agrege_un
+            self.agrege_suffixes = presque.default.agrege_un
         elif callable(fn_agg_suff):
             self.agrege_suffixes = fn_agg_suff
         else:
@@ -86,21 +86,21 @@ class Normalizer:
 
         # compile le regex qui trouve des séquences de lettres identiques (3x ou plus la même lettre d'affilé)
         self.re_multi = re.compile(
-            rf"(?P<letter>[{OOOOOH.chars.ALPHA}])(?P=letter){{2,}}"
+            rf"(?P<letter>[{presque.chars.ALPHA}])(?P=letter){{2,}}"
         )
 
         # certains caractères sont tout simplement enlevés, parenthèses et brackets.
         self.chars_todel = set(
-            OOOOOH.chars.PARENTHESES + OOOOOH.chars.BRACKETS
+            presque.chars.PARENTHESES + presque.chars.BRACKETS
         )
 
         # d'autres sont uniformisés: tirets et apostrophes.
         hyphens = set(
-            OOOOOH.chars.HYPHEN
-            + OOOOOH.chars.PERIOD
-            + OOOOOH.chars.PERIOD_CENTERED
+            presque.chars.HYPHEN
+            + presque.chars.PERIOD
+            + presque.chars.PERIOD_CENTERED
         ) - set("-")
-        apostrophes = set(OOOOOH.chars.APOSTROPHE) - set("'")
+        apostrophes = set(presque.chars.APOSTROPHE) - set("'")
         self.chars_toreplace = {i: "-" for i in hyphens}
         self.chars_toreplace.update({i: "'" for i in apostrophes})
 
@@ -203,7 +203,7 @@ class Normalizer:
             return coupe[0]
         a = [cherche(coupe[0])]
         for k, g in itertools.groupby(
-            coupe[1:], key=OOOOOH.ecriture_inclusive.issuffix
+            coupe[1:], key=presque.ecriture_inclusive.issuffix
         ):
             if k is False:
                 words_agg = "-".join((cherche(i) for i in g))
@@ -211,7 +211,7 @@ class Normalizer:
             else:
                 suffixes = itertools.chain.from_iterable(
                     (
-                        OOOOOH.ecriture_inclusive.split_suffixes(i)
+                        presque.ecriture_inclusive.split_suffixes(i)
                         for i in g
                     )
                 )

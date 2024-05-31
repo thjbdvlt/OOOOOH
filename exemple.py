@@ -1,5 +1,5 @@
-from OOOOOH.ecriture_inclusive import issuffix, split_suffixes
-from OOOOOH.default import agrege_un, agrege_plusieurs
+from presque.ecriture_inclusive import issuffix, split_suffixes
+from presque.default import agrege_un, agrege_plusieurs
 
 for s in (
     "rice",

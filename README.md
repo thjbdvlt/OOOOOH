@@ -1,6 +1,4 @@
-![import OOOOOH as oh](./img/import_as_oh.png)
-
-OOOOOH
+presque
 ======
 
 normalisation de mots français pour [spacy](https://spacy.io/): _BEEEAUCOUP_ devient _beaucoup_.
@@ -29,34 +27,34 @@ usage
 pour l'utiliser comme composant d'une [_pipeline spacy_](https://spacy.io/usage/processing-pipelines):
 
 ```python
-import OOOOOH as oh
+import presque
 import spacy
 
-@spacy.Language.factory("oh_normalizer")
-def create_oh_normalizer(nlp, name="oh_normalizer"):
+@spacy.Language.factory("presque_normalizer")
+def create_presque_normalizer(nlp, name="presque_normalizer"):
     """Construit un normalizer de Tokens."""
 
-    return oh.Normalizer(nlp=nlp)
+    return presque.Normalizer(nlp=nlp)
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("oh_normalizer", first=True)
+nlp.add_pipe("presque_normalizer", first=True)
 ```
 
 configuration
 -------------
 
 ```python
-import OOOOOH as oh
 import spacy
+import presque
 
 def aggregate_suffixes(suffixes: list, char: str) -> str:
     return char + char.join([suffixes])
 
-@spacy.Language.factory("oh_normalizer")
-def create_oh_normalizer(nlp, name="oh_normalizer"):
+@spacy.Language.factory("presque_normalizer")
+def create_presque_normalizer(nlp, name="presque_normalizer"):
     """Construit un normalizer de Tokens."""
 
-    return oh.Normalizer(
+    return presque.Normalizer(
         nlp=nlp,
         exc={"clef": "clé", "ptetre": "peut-être"},
         words_files=["./exemple/liste/de/mots/specifique.txt"],
@@ -66,15 +64,15 @@ def create_oh_normalizer(nlp, name="oh_normalizer"):
     )
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("oh_normalizer", first=True)
+nlp.add_pipe("presque_normalizer", first=True)
 ```
 
 installation
 ------------
 
 ```bash
-git clone https://github.com/thjbdvlt/OOOOOH OOOOOH
-cd OOOOOH
+git clone https://github.com/thjbdvlt/presque presque
+cd presque
 pip install .
 ```
 

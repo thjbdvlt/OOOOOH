@@ -1,1 +1,1 @@
-from OOOOOH.normalizer import Normalizer
+from presque.normalizer import Normalizer

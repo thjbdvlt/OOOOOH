@@ -1,13 +1,13 @@
 [project]
-name = "OOOOOH"
+name = "presque"
 authors = [{name="thjbdvlt"}]
 version = "0.1.0"
-description = "normalisation de mots français pour spacy: 'OOOOOH' devient 'oh'."
+description = "normalisation de mots français pour spacy"
 readme = "README.md"
 requires-python = ">=3.8"
 
 [project.urls]
-Homepage = "https://github.com/thjbdvlt/OOOOOH"
+Homepage = "https://github.com/thjbdvlt/presque"
 
 [build-system]
 requires = ["setuptools"]
