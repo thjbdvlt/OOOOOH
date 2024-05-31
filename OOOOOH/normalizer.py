@@ -215,7 +215,10 @@ class Normalizer:
                         for i in g
                     )
                 )
-                a.append(self.agrege_suffixes(suffixes, sep_char))
+                # a.append(self.agrege_suffixes(suffixes, sep_char))
+                a[-1] = self.agrege_suffixes(
+                    word=a[-1], suffixes=suffixes, char=sep_char
+                )
         return "".join(a)
 
     def normaliser_mot(self, word) -> str:

@@ -18,7 +18,7 @@ def set_suff_sort_key(s):
         return 0
 
 
-def agrege_un(suffixes, char) -> str:
+def agrege_un(word, suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot d'une part et les suffixes assemblés d'autre part.
 
     Args:
@@ -32,10 +32,10 @@ def agrege_un(suffixes, char) -> str:
 
     suffixes = sorted(suffixes, key=set_suff_sort_key)
     suffixes = "".join(suffixes)
-    return f"{char}{suffixes}"
+    return f"{word}{char}{suffixes}"
 
 
-def agrege_plusieurs(suffixes, char) -> str:
+def agrege_plusieurs(word, suffixes, char) -> str:
     """Agrège un mot et une liste de suffixes avec un point médian entre le mot et les suffixes, et entre chaque suffixe.
 
     Args:
@@ -49,10 +49,11 @@ def agrege_plusieurs(suffixes, char) -> str:
     """
 
     suffixes = sorted(suffixes, key=set_suff_sort_key)
-    return char.join(suffixes)
+    suffixes = char.join(suffixes)
+    return f"{word}{suffixes}"
 
 
-def remplace_par_feminin(word, suffixes) -> str:
+def remplace_par_feminin(word, suffixes, char) -> str:
     """Enlève les suffixes d'écriture inclusive et remplace, dans le mot, la terminaison masculine par une terminaison féminine.
 
     L'usage de cette fonction n'est pas recommandé, en premier lieu car il n'est pas souhaitable de dés-inclusiviser un texte, ensuite car elle modifie les propriétés morphologiques du mot, et enfin car elle est (probablement) assez imprécise. Elle peut toutefois être utile si l'on doit utiliser des modèles incapable d'analyser des textes avec de l'écriture inclusive (et permettra, à défaut d'améliorer ces modèles, de pouvoir analyser ces textes).
@@ -82,6 +83,7 @@ def remplace_par_feminin(word, suffixes) -> str:
         "ne": "n",
         "e": "",
     }
+    suffixes = list(suffixes)
     if "x" in suffixes:
         suffixes.remove("x")
     if "s" in suffixes:
