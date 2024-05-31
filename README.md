@@ -3,7 +3,7 @@
 OOOOOH
 ======
 
-normalisation de mots français pour [spacy](https://spacy.io/): `OOOOOH` devient `oh`.
+normalisation de mots français pour [spacy](https://spacy.io/): _BEEEAUCOUP_ devient _beaucoup_.
 
 |x|y|
 |--|--|
@@ -18,7 +18,7 @@ normalisation de mots français pour [spacy](https://spacy.io/): `OOOOOH` devien
 - les caractères répétés plus de 3x (2 pour la ponctuation) sont réduits à un seul (sauf "...").
 - les mots hors-lexiques sont remplacés par une version accentuée différemment, si une telle version existe.
 - les mots sont mis en minuscules.
-- les mots composés sont normalisés séparément.
+- les mots composés sont normalisés par l'agrégation de leurs composants, normalisés individuellement.
 - les variantes d'écritures inclusives sont uniformisées (caractère de séparation, nombre de caractères, ordre des suffixes).
 - les parenthèses et crochets sont enlevés.
 - les variantes de tirets (et d'apostrophes) remplacées par des tirets (ou apostrophes) simples (droites).
@@ -33,7 +33,7 @@ import OOOOOH as oh
 import spacy
 
 @spacy.Language.factory("oh_normalizer")
-def create_chut_normalizer(nlp, name="oh_normalizer"):
+def create_oh_normalizer(nlp, name="oh_normalizer"):
     """Construit un normalizer de Tokens."""
 
     return oh.Normalizer(nlp=nlp)
@@ -53,13 +53,13 @@ def aggregate_suffixes(suffixes: list, char: str) -> str:
     return char + char.join([suffixes])
 
 @spacy.Language.factory("oh_normalizer")
-def create_chut_normalizer(nlp, name="oh_normalizer"):
+def create_oh_normalizer(nlp, name="oh_normalizer"):
     """Construit un normalizer de Tokens."""
 
     return oh.Normalizer(
         nlp=nlp,
-        exc={"ptetre": "peut-être", "ouais": "oui"},
-        words_files=["./exemple/liste/de/mots/spécifique.txt"],
+        exc={"clef": "clé", "ptetre": "peut-être"},
+        words_files=["./exemple/liste/de/mots/specifique.txt"],
         use_default_word_list=False,
         suff_sep_char="-",
         fn_agg_suff=aggregate_suffixes,
