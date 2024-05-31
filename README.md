@@ -37,7 +37,7 @@ def create_presque_normalizer(nlp, name="presque_normalizer"):
     return presque.Normalizer(nlp=nlp)
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("presque_normalizer", first=True)
+nlp.add_pipe('presque_normalizer', first=True)
 ```
 
 configuration
