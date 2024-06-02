@@ -1,7 +1,7 @@
 presque
 ======
 
-normalisation de mots français pour [spacy](https://spacy.io/): _BEEEAUCOUP_ devient _beaucoup_.
+normalisation de mots français pour [spacy](https://spacy.io/).
 
 |x|y|
 |--|--|
@@ -30,12 +30,6 @@ pour l'utiliser comme composant d'une [_pipeline spacy_](https://spacy.io/usage/
 import presque
 import spacy
 
-@spacy.Language.factory("presque_normalizer")
-def create_presque_normalizer(nlp, name="presque_normalizer"):
-    """Construit un normalizer de Tokens."""
-
-    return presque.Normalizer(nlp=nlp)
-
 nlp = spacy.load("fr_core_news_lg")
 nlp.add_pipe('presque_normalizer', first=True)
 ```
@@ -50,8 +44,8 @@ import presque
 def aggregate_suffixes(suffixes: list, char: str) -> str:
     return char + char.join([suffixes])
 
-@spacy.Language.factory("presque_normalizer")
-def create_presque_normalizer(nlp, name="presque_normalizer"):
+@spacy.Language.factory("custom_presque_normalizer")
+def create_presque_normalizer(nlp, name="custom_presque_normalizer"):
     """Construit un normalizer de Tokens."""
 
     return presque.Normalizer(
@@ -64,7 +58,7 @@ def create_presque_normalizer(nlp, name="presque_normalizer"):
     )
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("presque_normalizer", first=True)
+nlp.add_pipe("custom_presque_normalizer", first=True)
 ```
 
 installation

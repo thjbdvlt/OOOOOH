@@ -1,5 +1,5 @@
 import re
-from spacy.lookups import Table
+import spacy.lookups
 import itertools
 import presque.default
 import presque.chars
@@ -24,8 +24,6 @@ class Normalizer:
             fn_agg_suff (callable):  Une fonction définissant comment agréger les suffixes d'écriture inclusive, elle reçoit en paramètre une liste de suffixes et un caractère de séparation (fixé avec le paramètre `suff_sep_char`).
             suff_sep_char (str): le caractere de séparation pour les suffixes d'écriture inclusive.
             use_default_word_list (bool):  utiliser (en plus des éventuels fichiers de mots en paramètres) la liste de mots integrée au package. (défaut True.)
-
-        Returns (None)
         """
 
         self.suff_sep_char = suff_sep_char
@@ -79,8 +77,8 @@ class Normalizer:
             d_noacc[self.desaccentuer(l)] = l
 
         # utilise l'objet `Table` de spaCy, optimisé pour le lookup.
-        self.index = Table(name="normes", data=d)
-        self.index_noacc = Table(
+        self.index = spacy.lookups.Table(name="normes", data=d)
+        self.index_noacc = spacy.lookups.Table(
             name="normes_sans_accents", data=d_noacc
         )
 
@@ -279,3 +277,10 @@ class Normalizer:
         for token in doc:
             token.norm_ = self.normaliser_mot(token.text)
         return doc
+
+
+@spacy.Language.factory("presque_normalizer")
+def create_presque_normalizer(nlp, name="presque_normalizer"):
+    """Construit un normalizer de Tokens."""
+
+    return presque.Normalizer(nlp=nlp)
