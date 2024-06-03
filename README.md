@@ -41,8 +41,8 @@ configuration
 import spacy
 import presque
 
-def aggregate_suffixes(suffixes: list, char: str) -> str:
-    return char + char.join(map(str.upper, suffixes))
+def aggregate_suffixes(word: str, suffixes: list, char: str) -> str:
+    return word + char + char.join(map(str.upper, suffixes))
 
 config = dict(
     name="normalizer",
