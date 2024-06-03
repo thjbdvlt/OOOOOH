@@ -42,23 +42,19 @@ import spacy
 import presque
 
 def aggregate_suffixes(suffixes: list, char: str) -> str:
-    return char + char.join([suffixes])
+    return char + char.join([map(str.upper, suffixes)])
 
-@spacy.Language.factory("custom_presque_normalizer")
-def create_presque_normalizer(nlp, name="custom_presque_normalizer"):
-    """Construit un normalizer de Tokens."""
-
-    return presque.Normalizer(
-        nlp=nlp,
-        exc={"clef": "clé", "ptetre": "peut-être"},
-        words_files=["./exemple/liste/de/mots/specifique.txt"],
-        use_default_word_list=False,
-        suff_sep_char="-",
-        fn_agg_suff=aggregate_suffixes,
-    )
+config = dict(
+    name="normalizer",
+    exc={"clef": "clé", "ptetre": "peut-être"},
+    words_files=["./exemple/liste/de/mots/specifique.txt"],
+    use_default_word_list=False,
+    suff_sep_char="-",
+    fn_agg_suff=aggregate_suffixes,
+)
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("custom_presque_normalizer", first=True)
+nlp.add_pipe("custom_presque_normalizer", first=True, config=config)
 ```
 
 installation

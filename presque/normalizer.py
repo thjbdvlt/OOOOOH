@@ -39,6 +39,7 @@ class Normalizer:
         # une table qui associe, à chaque lettre accentuée, sa version non-accentuée
         self.accents_table = {}
         for letter, accentuated in {
+            "c": "ç",
             "e": "éèêë",
             "u": "üûù",
             "a": "âàä",
@@ -279,8 +280,33 @@ class Normalizer:
         return doc
 
 
-@spacy.Language.factory("presque_normalizer")
-def create_presque_normalizer(nlp, name="presque_normalizer"):
+@spacy.Language.factory(
+    "presque_normalizer",
+    default_config={
+        "name": "presque_normalizer",
+        "words_files": [],
+        "exc": {},
+        "fn_agg_suff": None,
+        "suff_sep_char": "·",
+        "use_default_word_list": True,
+    },
+)
+def create_presque_normalizer(
+    nlp,
+    name,
+    words_files,
+    exc,
+    fn_agg_suff,
+    suff_sep_char,
+    use_default_word_list,
+):
     """Construit un normalizer de Tokens."""
 
-    return presque.Normalizer(nlp=nlp)
+    return presque.Normalizer(
+        nlp,
+        words_files,
+        exc,
+        fn_agg_suff,
+        suff_sep_char,
+        use_default_word_list,
+    )
