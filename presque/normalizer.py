@@ -103,6 +103,7 @@ class Normalizer:
         apostrophes = set(presque.chars.APOSTROPHE) - set("'")
         self.chars_toreplace = {i: "-" for i in hyphens}
         self.chars_toreplace.update({i: "'" for i in apostrophes})
+        self.chars_toreplace["œ"] = "oe"
 
         # ajouter les exceptions
         n = self.index

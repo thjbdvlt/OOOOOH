@@ -4,7 +4,7 @@ def set_suff_sort_key(s):
     Args:
         s (str): le suffixe.
 
-    Returns (int): 
+    Returns (int):
 
     Note:
         Cette fonction est uniquement destinée à être utilisée comme `key` dans la fonction `sorted`.
