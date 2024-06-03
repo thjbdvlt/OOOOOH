@@ -16,14 +16,15 @@ class Normalizer:
         suff_sep_char="·",
         use_default_word_list=True,
     ):
-        """initier un Normalizer.
+        """Initier un Normalizer.
 
         Args:
-            words_fp (str):  Fichier avec une liste de mot (un par ligne)
-            exc (dict):  Les exceptions, par exemple {"ouais": "oui"}
-            fn_agg_suff (callable):  Une fonction définissant comment agréger les suffixes d'écriture inclusive, elle reçoit en paramètre une liste de suffixes et un caractère de séparation (fixé avec le paramètre `suff_sep_char`).
-            suff_sep_char (str): le caractere de séparation pour les suffixes d'écriture inclusive.
-            use_default_word_list (bool):  utiliser (en plus des éventuels fichiers de mots en paramètres) la liste de mots integrée au package. (défaut True.)
+            nlp:  le modèle chargé par spacy avec la pipeline.
+            words_files (list):  une liste de fichiers à charger pour les normes.
+            exc (dict):  un dictionnaire mappant des graphie à des normes.
+            fn_agg_suff (callable):  une fonction pour agréger les suffixes d'écriture inclusive.
+            suff_sep_char (str):  le caractère à utiliser pour séparer le mot des suffixes inclusifs (et, éventuellement, les suffixes entre eux).
+            use_default_word_list (bool):  utiliser la liste de mots fournis par défault. (default: True)
         """
 
         self.suff_sep_char = suff_sep_char
@@ -300,7 +301,19 @@ def create_presque_normalizer(
     suff_sep_char,
     use_default_word_list,
 ):
-    """Construit un normalizer de Tokens."""
+    """Construit un normalizer de Tokens.
+
+    Args:
+        nlp:  le modèle chargé par spacy avec la pipeline.
+        name (str):  le nom du pipeline component.
+        words_files (list):  une liste de fichiers à charger pour les normes.
+        exc (dict):  un dictionnaire mappant des graphie à des normes.
+        fn_agg_suff (callable):  une fonction pour agréger les suffixes d'écriture inclusive.
+        suff_sep_char (str):  le caractère à utiliser pour séparer le mot des suffixes inclusifs (et, éventuellement, les suffixes entre eux).
+        use_default_word_list (bool):  utiliser la liste de mots fournis par défault. (default: True)
+
+    Returns (Normalizer):  un objet pour normaliser les tokens.
+    """
 
     return presque.Normalizer(
         nlp,
