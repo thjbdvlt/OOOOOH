@@ -12,6 +12,7 @@ normalisation de mots français pour [spacy](https://spacy.io/).
 |auteur-rice-x-s|auteur·ricexs|
 |peut—être|peut-être|
 |autre[ment]|autrement|
+|désœuvrement|désoeuvrement|
 
 - les caractères répétés plus de 3x (2 pour la ponctuation) sont réduits à un seul (sauf "...").
 - les mots hors-lexiques sont remplacés par une version accentuée différemment, si une telle version existe.
