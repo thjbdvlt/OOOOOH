@@ -54,7 +54,7 @@ config = dict(
 )
 
 nlp = spacy.load("fr_core_news_lg")
-nlp.add_pipe("custom_presque_normalizer", first=True, config=config)
+nlp.add_pipe("presque_normalizer", first=True, config=config)
 ```
 
 installation
