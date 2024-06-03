@@ -42,7 +42,7 @@ import spacy
 import presque
 
 def aggregate_suffixes(suffixes: list, char: str) -> str:
-    return char + char.join([map(str.upper, suffixes)])
+    return char + char.join(map(str.upper, suffixes))
 
 config = dict(
     name="normalizer",
