@@ -30,11 +30,12 @@ class Normalizer:
         self.suff_sep_char = suff_sep_char
 
         # la valeur du paramètre `fn_agg_suff` doit être callable,
-        if fn_agg_suff is None:
+        if not fn_agg_suff:
             self.agrege_suffixes = presque.default.agrege_un
         elif callable(fn_agg_suff):
             self.agrege_suffixes = fn_agg_suff
         else:
+            print(fn_agg_suff, fn_agg_suff)
             raise TypeError("`fn_agg_suff` is not callable.")
 
         # une table qui associe, à chaque lettre accentuée, sa version non-accentuée
@@ -288,9 +289,9 @@ class Normalizer:
         "name": "presque_normalizer",
         "words_files": [],
         "exc": {},
-        "fn_agg_suff": None,
         "suff_sep_char": "·",
         "use_default_word_list": True,
+        "fn_agg_suff": None,
     },
 )
 def create_presque_normalizer(
@@ -298,9 +299,9 @@ def create_presque_normalizer(
     name,
     words_files,
     exc,
-    fn_agg_suff,
     suff_sep_char,
     use_default_word_list,
+    fn_agg_suff,
 ):
     """Construit un normalizer de Tokens.
 
@@ -309,7 +310,6 @@ def create_presque_normalizer(
         name (str):  le nom du pipeline component.
         words_files (list):  une liste de fichiers à charger pour les normes.
         exc (dict):  un dictionnaire mappant des graphie à des normes.
-        fn_agg_suff (callable):  une fonction pour agréger les suffixes d'écriture inclusive.
         suff_sep_char (str):  le caractère à utiliser pour séparer le mot des suffixes inclusifs (et, éventuellement, les suffixes entre eux).
         use_default_word_list (bool):  utiliser la liste de mots fournis par défault. (default: True)
 
@@ -317,10 +317,10 @@ def create_presque_normalizer(
     """
 
     return presque.Normalizer(
-        nlp,
-        words_files,
-        exc,
-        fn_agg_suff,
-        suff_sep_char,
-        use_default_word_list,
+        nlp=nlp,
+        words_files=words_files,
+        exc=exc,
+        suff_sep_char=suff_sep_char,
+        use_default_word_list=use_default_word_list,
+        fn_agg_suff=fn_agg_suff,
     )
