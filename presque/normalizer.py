@@ -5,6 +5,8 @@ import presque.default
 import presque.chars
 import presque.ecriture_inclusive
 
+REGISTERED_NAME = "presque_normalizer"
+
 
 class Normalizer:
     def __init__(
@@ -284,7 +286,7 @@ class Normalizer:
 
 
 @spacy.Language.factory(
-    "presque_normalizer",
+    REGISTERED_NAME,
     default_config={
         "name": "presque_normalizer",
         "words_files": [],
