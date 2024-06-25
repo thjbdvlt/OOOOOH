@@ -33,6 +33,18 @@ import spacy
 
 nlp = spacy.load("fr_core_news_lg")
 nlp.add_pipe('presque_normalizer', first=True)
+
+[i.norm_ for i in nlp("QUOOOIIIIII PEUUUUUT---ÉÉÉtréééééé")]
+```
+
+```
+[quoi, peut-être]
+```
+
+it has `to_disk()` and `from_disk()` methods:
+
+```python
+nlp.to_disk("./model_output")
 ```
 
 configuration
