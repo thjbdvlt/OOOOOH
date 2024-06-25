@@ -4,6 +4,7 @@ import itertools
 import presque.default
 import presque.chars
 import presque.ecriture_inclusive
+import spacy.util
 
 REGISTERED_NAME = "presque_normalizer"
 
@@ -283,6 +284,23 @@ class Normalizer:
         for token in doc:
             token.norm_ = self.normaliser_mot(token.text)
         return doc
+
+    def to_disk(self, path, exclude=tuple()):
+        path = spacy.util.ensure_path(path)
+        if not path.exists():
+            path.mkdir()
+        for idx, filename in [(self.index, 'index'), (self.index_noacc, 'index_noacc')]:
+            idx_path = path / filename
+            with idx_path.open('wb') as f:
+                f.write(idx.to_bytes())
+
+    def from_disk(self, path, *, exclude=tuple()):
+        for i in ('index', 'index_noacc'):
+            idx_path = path / i
+            table = spacy.lookups.Table()
+            with idx_path.open('rb') as f:
+                table.from_bytes(f.read())
+            setattr(self, i, table)
 
 
 @spacy.Language.factory(
