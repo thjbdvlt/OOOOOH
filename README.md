@@ -28,7 +28,6 @@ usage
 pour l'utiliser comme composant d'une [_pipeline spacy_](https://spacy.io/usage/processing-pipelines):
 
 ```python
-import presque
 import spacy
 
 nlp = spacy.load("fr_core_news_lg")
@@ -52,7 +51,6 @@ configuration
 
 ```python
 import spacy
-import presque
 
 def aggregate_suffixes(word: str, suffixes: list, char: str) -> str:
     return word + char + char.join(map(str.upper, suffixes))
