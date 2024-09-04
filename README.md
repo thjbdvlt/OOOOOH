@@ -72,9 +72,7 @@ installation
 ------------
 
 ```bash
-git clone https://github.com/thjbdvlt/presque presque
-cd presque
-pip install .
+pip install git+https://github.com/thjbdvlt/spacy-presque
 ```
 
 dépendances
