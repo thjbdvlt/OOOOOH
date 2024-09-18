@@ -1,9 +1,9 @@
 import re
 import spacy.lookups
 import itertools
-import presque.default
-import presque.chars
-import presque.ecriture_inclusive
+from presque import default
+from presque import chars
+from presque import ecriture_inclusive
 import spacy.util
 
 REGISTERED_NAME = "presque_normalizer"
@@ -34,7 +34,7 @@ class Normalizer:
 
         # la valeur du paramètre `fn_agg_suff` doit être callable,
         if not fn_agg_suff:
-            self.agrege_suffixes = presque.default.agrege_un
+            self.agrege_suffixes = default.agrege_un
         elif callable(fn_agg_suff):
             self.agrege_suffixes = fn_agg_suff
         else:
@@ -90,21 +90,17 @@ class Normalizer:
 
         # compile le regex qui trouve des séquences de lettres identiques (3x ou plus la même lettre d'affilé)
         self.re_multi = re.compile(
-            rf"(?P<letter>[{presque.chars.ALPHA}])(?P=letter){{2,}}"
+            rf"(?P<letter>[{chars.ALPHA}])(?P=letter){{2,}}"
         )
 
         # certains caractères sont tout simplement enlevés, parenthèses et brackets.
-        self.chars_todel = set(
-            presque.chars.PARENTHESES + presque.chars.BRACKETS
-        )
+        self.chars_todel = set(chars.PARENTHESES + chars.BRACKETS)
 
         # d'autres sont uniformisés: tirets et apostrophes.
         hyphens = set(
-            presque.chars.HYPHEN
-            + presque.chars.PERIOD
-            + presque.chars.PERIOD_CENTERED
+            chars.HYPHEN + chars.PERIOD + chars.PERIOD_CENTERED
         ) - set("-")
-        apostrophes = set(presque.chars.APOSTROPHE) - set("'")
+        apostrophes = set(chars.APOSTROPHE) - set("'")
         self.chars_toreplace = {i: "-" for i in hyphens}
         self.chars_toreplace.update({i: "'" for i in apostrophes})
         self.chars_toreplace["œ"] = "oe"
@@ -208,17 +204,14 @@ class Normalizer:
             return coupe[0]
         a = [cherche(coupe[0])]
         for k, g in itertools.groupby(
-            coupe[1:], key=presque.ecriture_inclusive.issuffix
+            coupe[1:], key=ecriture_inclusive.issuffix
         ):
             if k is False:
                 words_agg = "-".join((cherche(i) for i in g))
                 a.append(f"-{words_agg}")
             else:
                 suffixes = itertools.chain.from_iterable(
-                    (
-                        presque.ecriture_inclusive.split_suffixes(i)
-                        for i in g
-                    )
+                    (ecriture_inclusive.split_suffixes(i) for i in g)
                 )
                 # a.append(self.agrege_suffixes(suffixes, sep_char))
                 a[-1] = self.agrege_suffixes(
@@ -289,16 +282,19 @@ class Normalizer:
         path = spacy.util.ensure_path(path)
         if not path.exists():
             path.mkdir()
-        for idx, filename in [(self.index, 'index'), (self.index_noacc, 'index_noacc')]:
+        for idx, filename in [
+            (self.index, "index"),
+            (self.index_noacc, "index_noacc"),
+        ]:
             idx_path = path / filename
-            with idx_path.open('wb') as f:
+            with idx_path.open("wb") as f:
                 f.write(idx.to_bytes())
 
     def from_disk(self, path, *, exclude=tuple()):
-        for i in ('index', 'index_noacc'):
+        for i in ("index", "index_noacc"):
             idx_path = path / i
             table = spacy.lookups.Table()
-            with idx_path.open('rb') as f:
+            with idx_path.open("rb") as f:
                 table.from_bytes(f.read())
             setattr(self, i, table)
 
@@ -336,7 +332,7 @@ def create_presque_normalizer(
     Returns (Normalizer):  un objet pour normaliser les tokens.
     """
 
-    return presque.Normalizer(
+    return Normalizer(
         nlp=nlp,
         words_files=words_files,
         exc=exc,

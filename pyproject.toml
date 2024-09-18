@@ -1,5 +1,5 @@
 [project]
-name = "spacy_presque"
+name = "presque"
 authors = [{name="thjbdvlt"}]
 version = "0.1.0"
 description = "normalisation de mots français pour spacy"
